@@ -86,6 +86,7 @@ RCT_REMAP_METHOD(authorize,
                  clientId: (NSString *) clientId
                  clientSecret: (NSString *) clientSecret
                  scopes: (NSArray *) scopes
+                 state: (NSString *) state
                  additionalParameters: (NSDictionary *_Nullable) additionalParameters
                  serviceConfiguration: (NSDictionary *_Nullable) serviceConfiguration
                  skipCodeExchange: (BOOL) skipCodeExchange
@@ -102,6 +103,7 @@ RCT_REMAP_METHOD(authorize,
                                 clientId: clientId
                             clientSecret: clientSecret
                                   scopes: scopes
+                                   state: state
                                 useNonce: useNonce
                                  usePKCE: usePKCE
                     additionalParameters: additionalParameters
@@ -120,6 +122,7 @@ RCT_REMAP_METHOD(authorize,
                                                                                         clientId: clientId
                                                                                     clientSecret: clientSecret
                                                                                           scopes: scopes
+                                                                                           state: state
                                                                                         useNonce: useNonce
                                                                                          usePKCE: usePKCE
                                                                             additionalParameters: additionalParameters
@@ -260,6 +263,7 @@ RCT_REMAP_METHOD(refresh,
                           clientId: (NSString *) clientId
                       clientSecret: (NSString *) clientSecret
                             scopes: (NSArray *) scopes
+                             state: (NSString *) state
                           useNonce: (BOOL *) useNonce
                            usePKCE: (BOOL *) usePKCE
               additionalParameters: (NSDictionary *_Nullable) additionalParameters
@@ -271,6 +275,7 @@ RCT_REMAP_METHOD(refresh,
     NSString *codeVerifier = usePKCE ? [[self class] generateCodeVerifier] : nil;
     NSString *codeChallenge = usePKCE ? [[self class] codeChallengeS256ForVerifier:codeVerifier] : nil;
     NSString *nonce = useNonce ? [[self class] generateState] : nil;
+    NSString *stateToUse = state ? state : [[self class] generateState];
 
     // builds authentication request
     OIDAuthorizationRequest *request =
@@ -280,7 +285,7 @@ RCT_REMAP_METHOD(refresh,
                                                      scope:[OIDScopeUtilities scopesWithArray:scopes]
                                                redirectURL:[NSURL URLWithString:redirectUrl]
                                               responseType:OIDResponseTypeCode
-                                                     state:[[self class] generateState]
+                                                     state:stateToUse
                                                      nonce:nonce
                                               codeVerifier:codeVerifier
                                              codeChallenge:codeChallenge

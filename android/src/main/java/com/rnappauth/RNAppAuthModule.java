@@ -215,6 +215,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
             final String clientId,
             final String clientSecret,
             final ReadableArray scopes,
+            final String state,
             final ReadableMap additionalParameters,
             final ReadableMap serviceConfiguration,
             final Boolean skipCodeExchange,
@@ -246,6 +247,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
                         appAuthConfiguration,
                         clientId,
                         scopes,
+                        state,
                         redirectUrl,
                         usePKCE,
                         additionalParametersMap
@@ -275,6 +277,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
                                     appAuthConfiguration,
                                     clientId,
                                     scopes,
+                                    state,
                                     redirectUrl,
                                     usePKCE,
                                     additionalParametersMap
@@ -506,6 +509,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
             final AppAuthConfiguration appAuthConfiguration,
             final String clientId,
             final ReadableArray scopes,
+            final String state,
             final String redirectUrl,
             final Boolean usePKCE,
             final Map<String, String> additionalParametersMap
@@ -532,6 +536,9 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
             authRequestBuilder.setScope(scopesString);
         }
 
+        if (state != null) {
+            authRequestBuilder.setState(state);
+        }
 
         if (additionalParametersMap != null) {
             // handle additional parameters separately to avoid exceptions from AppAuth
